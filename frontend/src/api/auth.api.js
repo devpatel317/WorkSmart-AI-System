@@ -1,0 +1,9 @@
+import axios from "axios"
+
+export const API = axios.create({
+    baseURL : "http://localhost:5000/api",
+    withCredentials : true
+})
+
+export const loginUser = (data) => API.post("/auth/login", data);
+

@@ -1,0 +1,9 @@
+langchain
+langgraph
+pydantic
+ipython
+grandalf
+python-dotenv
+requests
+langchain-groq
+Flask
