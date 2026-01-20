@@ -1,8 +1,5 @@
 from graphs.sentinel_graph import sentinel_graph
-from state.agent_state import AgentState
-from tools.user_tool import get_all_employees
-from tools.task_tool import get_tasks_for_employee
-from tools.activity_tool import get_last_activity_days
+from agents.observer_agent import observer_agent
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -25,6 +22,8 @@ def analyze_burnout():
     print(type(initial_state))
     final_state = sentinel_graph.invoke(initial_state)
     print("Final State:", final_state)
+    print(f"DEBUG: optimization_decisions = {final_state.get('optimization_decisions', [])}")
+    print(f"DEBUG: executed_actions = {final_state.get('executed_actions', [])}")
     
     return jsonify({
         "employee_snapshots": final_state.get("employee_snapshots",[]),
@@ -36,6 +35,17 @@ def analyze_burnout():
 
 
 if __name__ == "__main__":
+    # result = observer_agent(
+    #     {
+    #     "employee_snapshots": [],
+    #     "burnout_assessments": [],
+    #     "optimization_decisions": [],
+    #     "executed_actions": [],
+    #     "burnout_detected" : False
+    # }
+    # )
+
+    # print("Observer Agent Result:", result)
     app.run(port=8000)
     # days = get_last_activity_days("69533905b32e7454c2494c7f")
     # print("days",days)

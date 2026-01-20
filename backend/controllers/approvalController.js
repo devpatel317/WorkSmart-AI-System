@@ -107,7 +107,7 @@ exports.getPendingApprovals = async (req,res) => {
     try{
         const pendingRequests = await ApprovalRequest.find({
             status : "pending_approval",
-            //    approverRoles: role
+            // approverRoles: role
         }).sort({createdAt : -1}).lean()
 
         return res.status(200).json({

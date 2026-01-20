@@ -24,6 +24,7 @@ def observer_agent(state : AgentState) -> dict:
 
     employee_snapshots: list[EmployeeSnapshot] = []
     employees = get_all_employees()
+    # print("all employees", employees)
     now = datetime.now(timezone.utc)
 
     for emp in employees:
@@ -32,7 +33,7 @@ def observer_agent(state : AgentState) -> dict:
         tasks = get_tasks_for_employee(employee_id)
 
         total_tasks = len(tasks)
-        in_progress = sum(1 for t in tasks if t["status"] == "in_progress" or t["status"] == "pending")
+        in_progress = sum(1 for t in tasks if t["status"] == "in_progress")
         
         overdue = sum(
             1 for t in tasks
@@ -55,5 +56,11 @@ def observer_agent(state : AgentState) -> dict:
 
     return{
         **state,
-        "employee_snapshots" : employee_snapshots
+        "employee_snapshots" : employee_snapshots,
+        "burnout_detected": False,
+        "burnout_assessments": [],
+        "optimization_decisions": [],
+        "executed_actions": []
     }
+
+# get Employees work perfectly 

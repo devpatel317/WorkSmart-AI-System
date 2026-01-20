@@ -9,21 +9,22 @@ exports.analyzeBurnout = async (req,res) => {
 
         const {employee_snapshots,burnout_assessments,optimization_decisions,executed_actions} = response.data
 
-        for(const action of executed_actions){
-            await ApprovalRequest.create({
-                employeeId : action.employeeId,
-                action : action.action,
-                risk : action.risk,
-                approverRoles : action.approver_roles,
-                justification : action.justification,
-                status : "pending_approval"
-            })
-        }
+        // for(const action of executed_actions){
+        //     await ApprovalRequest.create({
+        //         employeeId : action.employeeId,
+        //         action : action.action,
+        //         risk : action.risk,
+        //         approverRoles : action.approver_roles,
+        //         justification : action.justification,
+        //         status : "pending_approval"
+        //     })
+        // }
 
         return res.status(200).json({
             message : "Burnout analysis completed",
-            burnout_assessments,
-            pending_actions : executed_actions
+            // burnout_assessments,
+            // pending_actions : executed_actions 
+            analyzed_data : response.data
         })
         
     }

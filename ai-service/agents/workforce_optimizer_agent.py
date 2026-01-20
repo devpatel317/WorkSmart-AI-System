@@ -3,9 +3,10 @@ from langchain.chat_models import init_chat_model
 
 def workforce_optimizer_agent(state : AgentState) -> AgentState:
     decisions = []
-
+ 
+    print("Workforce Optimizer Agent Invoked")
     for assessment in state["burnout_assessments"]:
-        if assessment["risk_level"] == "low" or assessment["risk_level"] == "high":
+        if assessment["risk_level"] == "low" or assessment["risk_level"] == "medium":
             continue
 
         prompt = f"""

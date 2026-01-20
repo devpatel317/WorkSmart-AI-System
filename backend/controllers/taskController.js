@@ -52,6 +52,8 @@ exports.updateTaskStatus = async (req,res) => {
         const {taskId} = req.params
         const {status} = req.body
 
+        console.log("task status body",req.body)
+
         const allowedStatus = ["pending", "in_progress", "completed"]
         if(!allowedStatus.includes(status)){
             return res.json(400).json({
@@ -90,7 +92,7 @@ exports.updateTaskStatus = async (req,res) => {
 
 exports.getTasksForEmployee = async (req, res) => {
   try {
-    const employeeId  = new mongoose.Types.ObjectId(req.user.id);
+    const employeeId  = new mongoose.Types.ObjectId(req.params.employeeId);
     isValid = mongoose.Types.ObjectId.isValid(employeeId)
     
     if (!isValid) {

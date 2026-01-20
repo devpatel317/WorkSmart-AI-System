@@ -47,8 +47,10 @@ def policy_guard_agent(state : AgentState) -> AgentState:
         if needs_approval:
             approval_required = True
 
+    print(f"DEBUG: Policy Guard created {len(reviewed_actions)} executed actions")
     state["executed_actions"] = reviewed_actions
     state["approval_required"] = approval_required
+    print(f"DEBUG: Final executed_actions count: {len(state['executed_actions'])}")
 
     # If approval needed, create an approval request and persist the workflow snapshot
     # if approval_required:

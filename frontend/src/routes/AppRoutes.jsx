@@ -5,6 +5,10 @@ import ManagerDashboard from "../pages/ManagerDashboard"
 import AdminDashboard from "../pages/AdminDashboard"
 import ProtectedRoutes from "./ProtectedRoutes"
 import EmployeeDashboard from "../pages/EmployeeDashboard"
+import ManagerLayout from "../theme/ManagerLayout"
+import TasksPage from "../pages/managerPages/TaskPage"
+import AssignTaskPage from "../pages/managerPages/AssignTaskPage"
+import InsightsPage from "../pages/managerPages/InsightsPage"  
 
 const AppRoutes = () => {
   return (
@@ -36,6 +40,11 @@ const AppRoutes = () => {
                 <AdminDashboard/>
             }
         />
+        <Route path="/manager" element={<ManagerLayout />}>
+            <Route path="tasks" element={<TasksPage />} />
+            <Route path="assign" element={<AssignTaskPage />} />
+            <Route path="insights" element={<InsightsPage />} />
+        </Route>
     </Routes>
   )
 }

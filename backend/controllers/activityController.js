@@ -28,7 +28,10 @@ exports.getLastActiveDays = async (req,res) => {
         const lastActive = new Date(lastActivity.createdAt)
 
         const diffTime = Math.abs(now - lastActive)
-        const diffDays = Math.floor(diffTime/(1000*60*60*24))
+        let diffDays = Math.floor(diffTime/(1000*60*60*24))
+        if(diffDays === 0){
+            diffDays = 1
+        }
 
         return res.json({
             employeeId,

@@ -8,11 +8,16 @@ import {
   Typography,
   Dialog,
   DialogTitle,
-  DialogContent
+  DialogContent,
+  Select,
+  MenuItem,
+  FormControl,
+  Autocomplete,
+  TextField
 } from "@mui/material"  
 
 
-const ActiveTasksTable = ({tasks,onDone}) => {
+const ActiveTasksTable = ({tasks,onStatusChange}) => {
     const [open, setOpen] = React.useState(false);
     const [fullDesc, setFullDesc] = React.useState("");
 
@@ -75,9 +80,18 @@ const ActiveTasksTable = ({tasks,onDone}) => {
       field: "status",
       headerName: "Status",
       width: 130,
-      renderCell: (params) => (
-        <Chip label={params.value} color="info" size="small" />
-      )
+      renderCell: (params) => {
+        const color = 
+          params.value === "completed"
+            ? "success"
+            : params.value === "in_progress"
+            ? "warning"
+            : "info";
+
+        return(
+          <Chip label={params.value.replace("_"," ")} color={color} size="small" />
+        )
+      }
     },
     {
       field: "deadline",
@@ -92,20 +106,60 @@ const ActiveTasksTable = ({tasks,onDone}) => {
       field: "actions",
       headerName: "Action",
       width: 150,
+      align : "center",
+      headerAlign: "center",
       sortable: false,
-      renderCell: (params) => (
-        <Button
-          variant="contained"
+      renderCell: (params) => {
+        const row = params?.row;
+
+    if (!row) return null;
+
+    const { status, id } = row;
+
+    if (status === "completed") {
+      return <Chip label="Completed" color="success" size="small" />;
+    }
+
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%"
+        }}
+      >
+        <Select
           size="small"
-          color="success"
-          onClick={() => 
-            // console.log("task done")
-            onDone(params.row.id)
-        }
+          value=""
+          displayEmpty
+          onChange={(e) => onStatusChange(id, e.target.value)}
+          sx={{
+            minWidth: 140,
+            height: 32,
+            borderRadius: "16px",
+            "& fieldset": { border: "none" },
+            "& .MuiSelect-select": {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "6px 12px"
+            }
+          }}
+          renderValue={() =>
+            status === "pending" ? "Pending" : "In Progress"
+          }
         >
-          Mark Done
-        </Button>
-      )
+          {status === "pending" && (
+            <MenuItem value="in_progress">In Progress</MenuItem>
+          )}
+          <MenuItem value="completed">Completed</MenuItem>
+        </Select>
+      </Box>
+    );
+  
+      }
     }
   ];
 
@@ -118,6 +172,7 @@ const ActiveTasksTable = ({tasks,onDone}) => {
 
       <DataGrid
         rows={tasks}
+        // getRowId={(row) => row._id}
         columns={columns}
         autoHeight
         disableRowSelectionOnClick

@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { Box, Button, CircularProgress, Grid, Card, CardContent, Typography, skeletonClasses } from '@mui/material'
 import { API } from '../api/auth.api'
+import BurnoutReportSection from './BurnoutReportSection'
 
 const BurnoutAnalysis = () => {
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,7 @@ const BurnoutAnalysis = () => {
     try {
       const res = await API.get("/analyze/analyzeBurnout")
       console.log("res", res)
-      setData(res.data)
+      setData(res.data.analyzed_data)
     } catch (err) {
       alert("Anlaysis failed")
     } finally {
@@ -21,95 +22,42 @@ const BurnoutAnalysis = () => {
   }
 
   return (
-    <Box mt={4}>
-      <Typography variant="h6" mb={2}>
-        AI Workload Analysis
+    <Box sx={{ mt: 4 }}>
+      {/* Header */}
+      <Typography variant="h6" gutterBottom>
+        Employee Burnout Analysis
       </Typography>
 
+      {/* Run Analysis Button */}
       <Button
         variant="contained"
+        color="primary"
         onClick={runAnalysis}
         disabled={loading}
+        sx={{ mb: 3 }}
       >
-        Run Analysis
+        {loading ? (
+          <>
+            <CircularProgress size={20} sx={{ mr: 1 }} />
+            Analyzing...
+          </>
+        ) : (
+          "Run Burnout Analysis"
+        )}
       </Button>
 
-      {loading && (
-        <Box mt={2}>
-          <CircularProgress />
-        </Box>
+      {/* No Data Yet */}
+      {!data && !loading && (
+        <Card sx={{ p: 2 }}>
+          <Typography variant="body2" color="text.secondary">
+            Click <strong>Run Burnout Analysis</strong> to evaluate employee
+            workload and well-being using AI insights.
+          </Typography>
+        </Card>
       )}
 
-      {data && (
-        <>
-          {data.burnout_detected ? (
-            // <Grid container spacing={2} mt={2}>
-            //   <Grid item xs={12} md={3}>
-            //     <Card>
-            //       <CardContent>
-            //         <Typography>Total Tasks</Typography>
-            //         <Typography variant="h5">{data.total_tasks}</Typography>
-            //       </CardContent>
-            //     </Card>
-            //   </Grid>
-
-            //   <Grid item xs={12} md={3}>
-            //     <Card>
-            //       <CardContent>
-            //         <Typography>Burnout Score</Typography>
-            //         <Typography variant="h5" color="error">
-            //           {data.burnout_score}
-            //         </Typography>
-            //       </CardContent>
-            //     </Card>
-            //   </Grid>
-
-            //   <Grid item xs={12} md={3}>
-            //     <Card>
-            //       <CardContent>
-            //         <Typography>Risk Level</Typography>
-            //         <Typography variant="h5">
-            //           {data.risk_level}
-            //         </Typography>
-            //       </CardContent>
-            //     </Card>
-            //   </Grid>
-
-            //   <Grid item xs={12} md={3}>
-            //     <Card>
-            //       <CardContent>
-            //         <Typography>Affected Employees</Typography>
-            //         <Typography variant="h5">
-            //           {data.affected_employees}
-            //         </Typography>
-            //       </CardContent>
-            //     </Card>
-            //   </Grid>
-            // </Grid>
-            <div>Analyzed data</div>
-          ) : (
-            <Box mt={3}>
-              <Card sx={{ bgcolor: "#222422" }}>
-                <CardContent>
-                  <Typography variant="h6" color="success.main">
-                    ✅ Team Workload is Healthy
-                  </Typography>
-
-                  <Typography mt={1}>
-                    Our analysis indicates that the team workload is well balanced.
-                    No burnout risks were detected at this time.
-                  </Typography>
-
-                  <Typography mt={1} color="text.secondary">
-                    Keep up the good work and continue monitoring regularly.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-          )}
-        </>
-      )}
-
+      {/* Analysis Result */}
+      {data && <BurnoutReportSection data={data} />}
     </Box>
   )
 }

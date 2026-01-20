@@ -23,9 +23,9 @@ router.patch(
 )
 
 router.get(
-    "/get-tasks",
-    // internalAuth,
-    protect,
+    "/get-tasks/:employeeId",
+    internalAuth,
+    // protect,
     getTasksForEmployee
 )
 
