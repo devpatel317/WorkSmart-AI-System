@@ -62,7 +62,7 @@ const CreateUserForm = () => {
         />
 
         <TextField
-          label="Temporary Password"
+          label="Password"
           name="password"
           value={form.password}
           onChange={handleChange}
